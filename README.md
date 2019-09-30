@@ -1,4 +1,8 @@
-# DoupStateWatch
+# StateWatch III
+
+- Fig. 8, how to model transitions from `displays` to `alarms-beep` substates?
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.6.
 

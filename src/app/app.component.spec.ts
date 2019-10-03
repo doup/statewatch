@@ -16,16 +16,16 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    it(`should have as title 'doup-state-watch'`, () => {
+    it(`should have as title 'doup-statewatch'`, () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        expect(app.title).toEqual('doup-state-watch');
+        expect(app.title).toEqual('doup-statewatch');
     });
 
     it('should render title', () => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('.content span').textContent).toContain('doup-state-watch app is running!');
+        expect(compiled.querySelector('.content span').textContent).toContain('doup-statewatch app is running!');
     });
 });

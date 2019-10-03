@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "doup-state-watch": {
+    "doup-statewatch": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/doup-state-watch",
+            "outputPath": "dist/doup-statewatch",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "doup-state-watch:build"
+            "browserTarget": "doup-statewatch:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "doup-state-watch:build:production"
+              "browserTarget": "doup-statewatch:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "doup-state-watch:build"
+            "browserTarget": "doup-statewatch:build"
           }
         },
         "test": {
@@ -115,15 +115,15 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "doup-state-watch:serve"
+            "devServerTarget": "doup-statewatch:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "doup-state-watch:serve:production"
+              "devServerTarget": "doup-statewatch:serve:production"
             }
           }
         }
       }
     }},
-  "defaultProject": "doup-state-watch"
+  "defaultProject": "doup-statewatch"
 }

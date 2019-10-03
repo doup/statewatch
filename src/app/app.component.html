@@ -15,9 +15,9 @@
                 ⏱
             </div>
             <div class="watch__display">
-                <div *ngIf="state.matches('main.displays.time') || state.matches('main.displays.wait')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.time') || state.matches('main.displays.wait')">{{ state.context.time | date:'HH:mm:ss' }}</div>
                 <div *ngIf="state.matches('main.displays.update')">00:00:00</div>
-                <div *ngIf="state.matches('main.displays.date')">12 DEC</div>
+                <div *ngIf="state.matches('main.displays.date')">{{ state.context.time | date:'d LLL' }}</div>
                 <div *ngIf="state.matches('main.displays.alarm1') || state.matches('main.displays.updateAlarm1')">
                     <span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.hours') }">00</span>:<span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.minutes10') }">0</span><span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.minutes') }">0</span>
                 </div>

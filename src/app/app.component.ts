@@ -1,11 +1,27 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-import { Machine, interpret, State, HistoryStateNodeConfig, EventObject } from 'xstate';
-import { fromEventPattern, Observable } from 'rxjs';
+import { Machine, interpret, State, HistoryStateNodeConfig, EventObject, assign } from 'xstate';
+import { fromEventPattern, Observable, interval } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+const timeTick$ = interval(1000).pipe(map(() => Date.now()));
 
 const machine = Machine({
     id: 'watch',
+    context: {
+        time: Date.now(),
+    },
     type: 'parallel',
     states: {
+        clock: {
+            invoke: {
+                src: 'timeTick$',
+            },
+            on: {
+                UPDATE_TIME: {
+                    actions: ['updateTime'],
+                },
+            }
+        },
         main: {
             initial: 'displays',
             states: {
@@ -278,6 +294,13 @@ const machine = Machine({
         },
         power: {},
     },
+}, {
+    actions: {
+        updateTime: assign({ time: (_, event) => event.value }),
+    },
+    services: {
+        timeTick$: (context, event) => timeTick$.pipe(map(time => ({ type: 'UPDATE_TIME', value: time }))),
+    }
 });
 
 const service = interpret(machine);

@@ -1,40 +1,40 @@
 <div class="watch-wrapper">
     <div class="watch">
         <div class="watch__model">StateWatch III</div>
-        <div class="watch__screen" [ngClass]="{ 'watch__screen--lighted': in('light.on') }">
-            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': in('main.displays.alarm1') || in('main.displays.updateAlarm1'), 'watch__status--enabled': in('alarm1Status.enabled') }">
+        <div class="watch__screen" [ngClass]="{ 'watch__screen--lighted': state.matches('light.on') }">
+            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': state.matches('main.displays.alarm1') || state.matches('main.displays.updateAlarm1'), 'watch__status--enabled': state.matches('alarm1Status.enabled') }">
                 1️⃣
             </div>
-            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': in('main.displays.alarm2') }">
+            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': state.matches('main.displays.alarm2') }">
                 2️⃣
             </div>
-            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': in('main.displays.chime') }">
+            <div class="watch__status" [ngClass]="{ 'watch__status--highlight': state.matches('main.displays.chime') }">
                 🔔
             </div>
-            <div class="watch__status watch__status--enabled" [ngClass]="{ 'watch__status--highlight': in('main.displays.stopwatch') }">
+            <div class="watch__status watch__status--enabled" [ngClass]="{ 'watch__status--highlight': state.matches('main.displays.stopwatch') }">
                 ⏱
             </div>
             <div class="watch__display">
-                <div *ngIf="in('main.displays.time') || in('main.displays.wait')">00:00:00</div>
-                <div *ngIf="in('main.displays.update')">00:00:00</div>
-                <div *ngIf="in('main.displays.date')">12 DEC</div>
-                <div *ngIf="in('main.displays.alarm1') || in('main.displays.updateAlarm1')">
-                    <span [ngClass]="{ 'blink': in('main.displays.updateAlarm1.hours') }">00</span>:<span [ngClass]="{ 'blink': in('main.displays.updateAlarm1.minutes10') }">0</span><span [ngClass]="{ 'blink': in('main.displays.updateAlarm1.minutes') }">0</span>
+                <div *ngIf="state.matches('main.displays.time') || state.matches('main.displays.wait')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.update')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.date')">12 DEC</div>
+                <div *ngIf="state.matches('main.displays.alarm1') || state.matches('main.displays.updateAlarm1')">
+                    <span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.hours') }">00</span>:<span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.minutes10') }">0</span><span [ngClass]="{ 'blink': state.matches('main.displays.updateAlarm1.minutes') }">0</span>
                 </div>
-                <div *ngIf="in('main.displays.alarm2')">00:00</div>
-                <div *ngIf="in('main.displays.chime')">ON/OFF</div>
-                <div *ngIf="in('main.displays.stopwatch')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.alarm2')">00:00</div>
+                <div *ngIf="state.matches('main.displays.chime')">ON/OFF</div>
+                <div *ngIf="state.matches('main.displays.stopwatch')">00:00:00</div>
             </div>
         </div>
         <div class="watch__section">
-            <div *ngIf="in('main.displays.time')">Time</div>
-            <div *ngIf="in('main.displays.wait')">Wait...</div>
-            <div *ngIf="in('main.displays.update')">Update</div>
-            <div *ngIf="in('main.displays.date')">Date</div>
-            <div *ngIf="in('main.displays.alarm1') || in('main.displays.updateAlarm1')">Alarm 1</div>
-            <div *ngIf="in('main.displays.alarm2')">Alarm 2</div>
-            <div *ngIf="in('main.displays.chime')">Chime</div>
-            <div *ngIf="in('main.displays.stopwatch')">Stopwatch</div>
+            <div *ngIf="state.matches('main.displays.time')">Time</div>
+            <div *ngIf="state.matches('main.displays.wait')">Wait...</div>
+            <div *ngIf="state.matches('main.displays.update')">Update</div>
+            <div *ngIf="state.matches('main.displays.date')">Date</div>
+            <div *ngIf="state.matches('main.displays.alarm1') || state.matches('main.displays.updateAlarm1')">Alarm 1</div>
+            <div *ngIf="state.matches('main.displays.alarm2')">Alarm 2</div>
+            <div *ngIf="state.matches('main.displays.chime')">Chime</div>
+            <div *ngIf="state.matches('main.displays.stopwatch')">Stopwatch</div>
         </div>
         <div class="button" [ngClass]="'button--' + (button.value.toLowerCase())" *ngFor="let button of buttons" (mousedown)="down(button.value)" (mouseup)="up(button.value)">
             <div class="__label">{{ button.label }}</div>
@@ -43,5 +43,7 @@
     </div>
 </div>
 <div class="debug">
-    <code>{{ states.join(', ') }}</code>
+    <code>State: {{ state.value | json }}</code><br>
+    <code>Context: {{ state.context | json }}</code><br>
+    <code>Meta: {{ state.meta | json }}</code>
 </div>

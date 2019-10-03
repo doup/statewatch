@@ -298,7 +298,7 @@ const state$: Observable<[State<any, any>, EventObject]> = fromEventPattern(
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    states: string[] = [];
+    state: State<any, any>;
     buttons = [
         { value: 'A', label: 'Mode' },
         { value: 'B', label: 'Light + Start/Stop' },
@@ -313,7 +313,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         state$.subscribe(([state]) => {
             this.zone.run(() => {
-                this.states = state.toStrings();
+                this.state = state;
             });
         });
     }
@@ -321,10 +321,6 @@ export class AppComponent implements OnInit {
     down(button: string) {
         // service.send(['ANY_DOWN', `${button}_DOWN`]);
         service.send(`${button}_DOWN`);
-    }
-
-    in(state) {
-        return this.states.indexOf(state) !== -1;
     }
 
     up(button: string) {

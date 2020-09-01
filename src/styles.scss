@@ -151,7 +151,12 @@ html, body {
     }
 
     .__label {
+        margin: 0 $padding;
         white-space: nowrap;
+
+        &:empty {
+            display: none;
+        }
     }
 
     // BUTTON PRESS ANIMATION
@@ -172,11 +177,6 @@ html, body {
     // LEFT
     &--a {
         right: calc(100% - #{$buttonHeight / 2 + $padding + $border});
-
-        .__label,
-        .__button {
-            margin-left: $padding;
-        }
     }
 
     // RIGHT
@@ -185,11 +185,6 @@ html, body {
     &--d {
         left: calc(100% - #{$buttonHeight / 2 + $padding + $border});
         flex-direction: row-reverse;
-
-        .__label,
-        .__button {
-            margin-right: $padding;
-        }
     }
 
     // TOP

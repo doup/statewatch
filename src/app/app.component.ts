@@ -11,6 +11,12 @@ const machine = Machine({
         time: Date.now(),
     },
     type: 'parallel',
+    meta: {
+        A: 'Mode',
+        B: 'Light',
+        C: '',
+        D: '',
+    },
     states: {
         clock: {
             invoke: {
@@ -32,8 +38,12 @@ const machine = Machine({
                             on: {
                                 // TODO: (HISTORY_HACK) this should be just "alarm1", see: https://github.com/davidkpiano/xstate/issues/686
                                 A_DOWN: 'alarm1.lastMode',
-                                D_DOWN: 'date',
                                 C_DOWN: 'wait',
+                                D_DOWN: 'date',
+                            },
+                            meta: {
+                                C: 'Update (long-press)',
+                                D: 'Date',
                             },
                         },
                         wait: {
@@ -133,6 +143,9 @@ const machine = Machine({
                                 A_DOWN: 'alarm2',
                                 C_DOWN: 'updateAlarm1',
                             },
+                            meta: {
+                                C: 'Change',
+                            },
                         },
                         updateAlarm1: {
                             initial: 'hours',
@@ -181,6 +194,9 @@ const machine = Machine({
                                     on: {
                                         B_DOWN: 'config',
                                     },
+                                    meta: {
+                                        B: 'Start',
+                                    },
                                 },
                                 config: {
                                     type: 'parallel',
@@ -216,11 +232,18 @@ const machine = Machine({
                                                     on: {
                                                         B_DOWN: 'off',
                                                     },
+                                                    meta: {
+                                                        B: 'Stop',
+                                                    },
                                                 },
                                                 off: {
                                                     on: {
                                                         B_DOWN: 'on',
-                                                    }
+                                                    },
+                                                    meta: {
+                                                        B: 'Start',
+                                                        D: 'Reset',
+                                                    },
                                                 },
                                             },
                                         },
@@ -234,6 +257,11 @@ const machine = Machine({
                             },
                             on: {
                                 A_DOWN: 'time',
+                            },
+                            meta: {
+                                B: '',
+                                C: '',
+                                D: '',
                             },
                         },
                     }
@@ -299,7 +327,11 @@ const machine = Machine({
         updateTime: assign({ time: (_, event) => event.value }),
     },
     services: {
-        timeTick$: (context, event) => timeTick$.pipe(map(time => ({ type: 'UPDATE_TIME', value: time }))),
+        timeTick$: (context, event) => {
+            console.log(context, event);
+
+            return timeTick$.pipe(map(time => ({ type: 'UPDATE_TIME', value: time })));
+        },
     }
 });
 
@@ -315,19 +347,26 @@ const state$: Observable<[State<any, any>, EventObject]> = fromEventPattern(
     },
 );
 
+function mergeMeta(meta) {
+    return Object.keys(meta).reduce((acc, key) => {
+        const value = meta[key];
+
+        // Assuming each meta value is an object
+        Object.assign(acc, value);
+
+        return acc;
+    }, {});
+}
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+    meta: object;
     state: State<any, any>;
-    buttons = [
-        { value: 'A', label: 'Mode' },
-        { value: 'B', label: 'Light + Start/Stop' },
-        { value: 'C', label: 'Select' },
-        { value: 'D', label: 'Lap/Reset + Read/Set' },
-    ];
+    buttons = ['A', 'B', 'C', 'D'];
 
     constructor(
         protected zone: NgZone,
@@ -336,18 +375,17 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         state$.subscribe(([state]) => {
             this.zone.run(() => {
+                this.meta = mergeMeta(state.meta);
                 this.state = state;
             });
         });
     }
 
     down(button: string) {
-        // service.send(['ANY_DOWN', `${button}_DOWN`]);
         service.send(`${button}_DOWN`);
     }
 
     up(button: string) {
-        // service.send(['ANY_UP', `${button}_UP`]);
         service.send(`${button}_UP`);
     }
 }

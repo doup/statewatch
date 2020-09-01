@@ -23,7 +23,9 @@
                 </div>
                 <div *ngIf="state.matches('main.displays.alarm2')">00:00</div>
                 <div *ngIf="state.matches('main.displays.chime')">ON/OFF</div>
-                <div *ngIf="state.matches('main.displays.stopwatch')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.stopwatch.zero')">00:00:00</div>
+                <div *ngIf="state.matches('main.displays.stopwatch.config.run.on')">running</div>
+                <div *ngIf="state.matches('main.displays.stopwatch.config.run.off')">stopped</div>
             </div>
         </div>
         <div class="watch__section">
@@ -36,14 +38,14 @@
             <div *ngIf="state.matches('main.displays.chime')">Chime</div>
             <div *ngIf="state.matches('main.displays.stopwatch')">Stopwatch</div>
         </div>
-        <div class="button" [ngClass]="'button--' + (button.value.toLowerCase())" *ngFor="let button of buttons" (mousedown)="down(button.value)" (mouseup)="up(button.value)">
-            <div class="__label">{{ button.label }}</div>
-            <div class="__button">{{ button.value }}</div>
+        <div class="button" [ngClass]="'button--' + (btn.toLowerCase())" *ngFor="let btn of buttons" (mousedown)="down(btn)" (mouseup)="up(btn)">
+            <div class="__label">{{ meta[btn] }}</div>
+            <div class="__button">{{ btn }}</div>
         </div>
     </div>
 </div>
 <div class="debug">
     <code>State: {{ state.value | json }}</code><br>
     <code>Context: {{ state.context | json }}</code><br>
-    <code>Meta: {{ state.meta | json }}</code>
+    <code>Meta: {{ meta | json }}</code>
 </div>
